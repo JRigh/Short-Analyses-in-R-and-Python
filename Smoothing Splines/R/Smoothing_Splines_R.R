@@ -5,7 +5,12 @@
 library(MASS)
 library(tidyverse)
 library(splines)
+library(npreg)
 data(mcycle)
+
+write.csv(mcycle, 
+          "C:/Users/julia/OneDrive/Desktop/Statistics notes/w292024/smooting_splines/mcycle.csv",
+          row.names = FALSE)
 
 # fit smoothing splines model (ss) with default number of knots
 modss = with(mcycle, ss(times, accel))
@@ -19,8 +24,8 @@ head(fit)
 # plot the model
 ggplot(mcycle, aes(x = times, y = accel)) +
   geom_point(color = "black") +
-  geom_line(mod1ss)
-  labs(title = "Motorcycle Data: Time vs Acceleration",
+  geom_line(data = fit, aes(x = times, y = accel), col = 'red', lwd = 1.5) +
+  labs(title = "Smoothing Splines: Time vs Acceleration",
        subtitle = 'mcycel dataset',
        x = "Time (ms)",
        y = "Acceleration (g)") +
