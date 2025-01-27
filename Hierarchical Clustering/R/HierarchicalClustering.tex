@@ -1,0 +1,303 @@
+\documentclass[border=5mm, convert, usenames, dvipsnames,beamer]{standalone}
+\usetheme{Madrid}
+\usecolortheme{default}
+%Information to be included in the title page:
+\title{Sample title}
+\author{Anonymous}
+\institute{Overleaf}
+\date{2021}
+
+\usepackage[absolute,overlay]{textpos}
+
+\defbeamertemplate*{frametitle}{}[1][]
+{
+    \begin{textblock*}{12cm}(1cm,0.75cm)
+    {\color{purple} \fontsize{20}{43.2} \selectfont \insertframetitle}
+    \end{textblock*}
+    \begin{textblock*}{12cm}(1cm,2.5cm)
+    {\color{purple} \fontsize{20}{24} \selectfont \insertframesubtitle}
+    \end{textblock*}
+}
+
+
+\usepackage{ragged2e}
+
+\justifying
+\usepackage{lmodern}
+\usepackage{ImageMagick}
+\usepackage[utf8] {inputenc}
+\usefonttheme[onlymath]{serif}
+\usepackage[english] {label}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{bbm}
+\usepackage[round] {natbib}
+\usepackage{color}     
+\usepackage{changepage}
+\usepackage[export]{adjustbox}
+\usepackage{graphicx}
+\usepackage{minted}
+\usepackage{listings}
+\usepackage[svgnames]{xcolor}
+
+
+
+\setbeamertemplate{footline}[frame number]
+
+\lstdefinestyle{R} {language=R,
+    stringstyle=\color{DarkGreen},
+    morekeywords={TRUE,FALSE},
+    deletekeywords={data,frame,length,as,character},
+    keywordstyle=\color{blue},
+    commentstyle=\color{teal},    
+    basicstyle=\ttfamily\tiny,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=3pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=1
+}
+
+\setbeamertemplate{itemize item}[ball]
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+
+\lstdefinestyle{Python} {language=Python,
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\tiny,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=3pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=1}
+
+
+
+
+\def\one{\mbox{1\hspace{-4.25pt}\fontsize{12}{14.4}\selectfont\textrm{1}}} % 11pt 
+
+\makeatletter
+\setbeamertemplate{frametitle}[default]{}
+\makeatother
+\usepackage{booktabs}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+
+
+\begin{document}
+
+
+
+
+
+\begin{frame}[ fragile]{}
+\frametitle{Hierarchical Clustering: introduction}
+
+\normalsize
+\vspace{40}
+Hierarchical clustering is a method of cluster analysis that builds a hierarchy of clusters either by iteratively merging smaller clusters into larger ones (agglomerative) or by dividing a large cluster into smaller ones (divisive). This approach generates a tree-like structure called a dendrogram, which represents the nested grouping of data points and their similarity levels.
+
+\normalsize
+\vspace{10}
+Hierarchical clustering is most appropriate when you want to explore nested relationships in the data, such as in taxonomy (biology), customer segmentation, or gene expression analysis. It is particularly useful for smaller datasets where interpretability of the dendrogram is crucial, and when the number of clusters is unknown beforehand.
+\end{frame}
+
+
+
+\begin{frame}[ fragile]{}
+\frametitle{Hierarchical Clustering: metrics}
+
+\normalsize
+\vspace{40}
+A key component is calculating the distance between points or clusters, such as using for example the Euclidean distance between observations, defined as:
+
+$$
+d(i,j) = \sqrt{\sum_{k=1}^{n}(x_{ik} - x_{jk})^{2}}
+$$
+
+\normalsize
+\vspace{5}
+Different linkage criteria can be chosen. Let us mention Single Linkage, Complete Linkage or Average Linkage, defined respectively as:
+
+$$
+D(A,B) = min\{d(a,b) : a \in A, b /in B \},
+$$
+
+$$
+D(A, B) = max\{d(a,b) : a \in A, b /in B \},
+$$
+
+$$
+D(A, B) = \frac{1}{\abs{A} \abs{B}} \sum_{a \in  A}\sum_{b \in B} d(a,b)
+$$
+
+
+\end{frame}
+
+
+
+\begin{frame}[ fragile]{}
+\frametitle{'HairEyeColor' dataset}
+
+\scriptsize
+\vspace{40}
+\noindent
+\textbf{HairEyeColor}: dataset of 592 observations x 3 variables.
+
+\vspace{10}
+\noindent
+\textbf{Hair}:	qualitative variable: Black, Brown, Red, Blond\\
+
+\vspace{-10}
+\noindent
+\textbf{Eye}:	qualitative variable: Brown, Blue, Hazel, Green \\
+
+\vspace{-10}
+\noindent
+\textbf{Sex}:	qualitative variable: Male, Female\\
+
+
+
+\begin{lstlisting}[style=R]
+> head(HaiEyeColor)
+> HaiEyeColor
+> head(HairEyeColor)
+, , Sex = Male
+
+       Eye
+Hair    Brown Blue Hazel Green
+  Black    32   11    10     3
+  Brown    53   50    25    15
+  Red      10   10     7     7
+  Blond     3   30     5     8
+
+, , Sex = Female
+
+       Eye
+Hair    Brown Blue Hazel Green
+  Black    36    9     5     2
+  Brown    66   34    29    14
+  Red      16    7     7     7
+  Blond     4   64     5     8
+\end{lstlisting}
+
+
+\end{frame}
+
+
+
+
+\begin{frame}[ fragile]{}
+\frametitle{Summary}
+
+\vspace{50}
+\noindent
+In order to perform a correspondence analysis, we typically call the function 'ca()' from the package 'ca' on a contingency table. The summary of our analysis is displayed below.
+
+\begin{lstlisting}[style=R]
+> ca_result = ca(contingency_table)
+> ca_result
+
+ Principal inertias (eigenvalues):
+           1        2        3       
+Value      0.208773 0.022227 0.002598
+Percentage 89.37%   9.52%    1.11%   
+
+ Rows:
+            Black     Brown       Red    Blond
+Mass     0.182432  0.483108  0.119932 0.214527
+ChiDist  0.551192  0.159461  0.354770 0.838397
+Inertia  0.055425  0.012284  0.015095 0.150793
+Dim. 1  -1.104277 -0.324463 -0.283473 1.828229
+Dim. 2   1.440917 -0.219111 -2.144015 0.466706
+
+ Columns:
+            Brown     Blue     Hazel     Green
+Mass     0.371622 0.363176  0.157095  0.108108
+ChiDist  0.500487 0.553684  0.288654  0.385727
+Inertia  0.093086 0.111337  0.013089  0.016085
+Dim. 1  -1.077128 1.198061 -0.465286  0.354011
+\end{lstlisting}
+\end{frame}
+
+
+
+\begin{frame}[ fragile]{}
+\frametitle{Plot of factors in main dimentions}
+
+\scriptsize
+\vspace{40}
+
+
+ \includegraphics[scale=0.45,center]{CorrespondenceR1}
+
+\end{frame}
+
+
+
+
+\begin{frame}[ fragile]{}
+\frametitle{Main observations}
+
+\vspace{40}
+\begin{itemize}
+\item Dimension Reduction: The relationships between hair color and eye color in a lower-dimensional space, here the first two on the plot.
+
+\vspace{10}
+\noindent
+\item Association Visualization: Points close to each other in the plot indicate a stronger association between the corresponding hair and eye colors. For example, if "Black Hair" and "Brown Eyes" are close together (frequently observed together).
+
+\vspace{10}
+\noindent
+\item Dimensional Interpretation: The axes (Dimension 1 and Dimension 2) represent the principal dimensions that capture the most variance in the data.
+
+
+\vspace{10}
+\noindent
+\item Categorical Differentiation: The plot visually differentiates between hair and eye colors using different shapes and colors, making it easy to interpret the correspondence between categories.
+
+\end{itemize}
+
+
+\end{frame}
+
+
+
+
+\begin{frame}[ fragile]{}
+\frametitle{References}
+
+\vspace{10}
+\noindent
+An Introduction to Applied Multivariate Analysis with R, 2011, B. Everitt, T. Hothorn, Springer, e-ISBN 978-1-4419-9650-3
+
+\vspace{20}
+\noindent
+The R Project for Statistical Computing:
+
+\noindent
+\urlf{https://www.r-project.org/}
+
+\end{frame}
+
+
+
+
+
+
+\end{document}
